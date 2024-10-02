@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+require('dotenv').config();  // Import and configure dotenv
 
 router.post('/generate-template', async (req, res) => {
   const { prompt } = req.body;
 
   try {
-    const API_KEY = "AIzaSyCaQeB5BEIsxBbjt7V21qtYqbb6Wq0Cqkg";
-    
+    const API_KEY = process.env.OPEN_API_KEY;  // Access the environment variable
+
     const genAI = new GoogleGenerativeAI(API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -26,8 +27,6 @@ router.post('/generate-template', async (req, res) => {
     const heading = contentArray[0];  // First line as heading
     const subheading = contentArray[1]; // Second line as subheading
     const articles = contentArray.slice(2); // Remaining lines as articles
-
-    
 
     // Function to format the response
     const formatResponse = (heading, subheading, articles) => {
